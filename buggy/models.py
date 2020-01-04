@@ -4,29 +4,44 @@ from django.contrib.auth.models import User
 
 
 class Bugs(models.Model):
-    user_ticket_creator = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=50)
-    description = models.TextField()
-    posted = models.DateTimeField(default=timezone.now)
+    Title = models.CharField(max_length=100)
+    Description = models.TextField()
+    Posted = models.DateTimeField(default=timezone.now)
+    user_ticket_creator = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='Created',
+        blank=True,
+        null=True
+    )
     user_assigned_ticket = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='assigned',
+        related_name='Assigned',
+        blank=True,
+        null=True
     )
     user_completed_ticket = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='complete',
+        related_name='Complete',
+        blank=True,
+        null=True
     )
-    new = 'N'
-    in_progress = 'P'
-    done = 'D'
-    invalid = 'I'
-    status_selection = [
-        (new, 'New'),
-        (in_progress, 'In Progress'),
-        (done, 'Done'),
-        (invalid, 'Invalid')
+    New = 'New'
+    In_Progress = 'In_Progress'
+    Done = 'Done'
+    Invalid = 'Invalid'
+    Status_Selection = [
+        (New, 'New'),
+        (In_Progress, 'In_Progress'),
+        (Done, 'Done'),
+        (Invalid, 'Invalid')
     ]
-    status = models.CharField(
-        max_length=1, choices=status_selection, default=new)
+    Status = models.CharField(
+        max_length=100,
+        choices=Status_Selection,
+        default=New)
+
+    def __str__(self):
+        return f"(self.Title, self.Status)"

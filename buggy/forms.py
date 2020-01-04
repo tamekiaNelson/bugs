@@ -1,9 +1,16 @@
 from django import forms
+from buggy.models import Bugs
 
 
-class Ticket(forms.Form):
-    title = forms.CharField(max_length=50)
-    description = forms.CharField(widget=forms.Textarea)
+class Ticket(forms.ModelForm):
+    class Meta:
+        model = Bugs
+        fields = [
+            'user_ticket_creator',
+            'Title',
+            'Description',
+            'Status'
+        ]
 
 
 class LoginForm(forms.Form):

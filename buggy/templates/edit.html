@@ -1,9 +1,8 @@
-<div>
-    <br>
-    <br>
-    <div>
-        <form action='' method='post'>
-            {{form.as_p}}
-            <input type='submit' value='Submit'>
-        </form>
-    </div>
+<a href="/">Back to List</a>
+<h1> Edit Ticket</h1>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit">
+</form>
+<a href='/logout/'>Logout</a>

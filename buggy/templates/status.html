@@ -1,4 +1,9 @@
-    <h2 >User: {{user.username}}</h2>
-    <div>Created: </div>
-    <div>Assigned: </div>
-    <div>Completed: </div>
+<form action=''method='post'>      
+{% csrf_token %}
+{{form.as_p}}
+<input type='submit' value='Submit'>
+</form>
+
+
+
+<a href='/logout/'>Logout</a>

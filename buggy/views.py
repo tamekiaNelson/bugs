@@ -2,28 +2,26 @@ from django.shortcuts import render, HttpResponseRedirect, reverse
 from buggy.models import Bugs
 from buggy.forms import Ticket, LoginForm
 from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
 def index(request):
     html = 'index.html'
-    all_tickets = Bugs.objects.all().order_by('posted')
-    new = Bugs.objects.filter(
-        status='N').order_by('posted')
-    in_progress = Bugs.objects.filter(
-        status='P').order_by('-posted')
-    done = Bugs.objects.filter(
-        status='D').order_by('posted')
-    invalid = Bugs.objects.filter(
-        status='I').order_by('posted')
+    New = Bugs.objects.filter(
+        Status='New').order_by('-posted')
+    In_Progress = Bugs.objects.filter(
+        Status='In_Progress').order_by('-posted')
+    Done = Bugs.objects.filter(
+        Status='Done').order_by('-posted')
+    Invalid = Bugs.objects.filter(
+        Status='Invalid').order_by('-posted')
     return render(request, html, {
-        'all_tickets': all_tickets,
-        'new': new,
-        'in_progress': in_progress,
-        'done': done,
-        'invalid': invalid
-    }
-    )
+        'New': New,
+        'In_progress': In_Progress,
+        'Done': Done,
+        'Invalid': Invalid
+    })
 
 
 def view_single_ticket(request, id):
@@ -32,6 +30,7 @@ def view_single_ticket(request, id):
     return render(request, html, {'single_ticket': single_ticket})
 
 
+@login_required
 def add(request):
     html = 'add.html'
     if request.method == 'POST':
@@ -40,31 +39,41 @@ def add(request):
             data = form.cleaned_data
             Bugs.objects.create(
                 user_ticket_creator=request.user,
-                title=data['title'],
-                description=data['description'],
+                Title=data['Title'],
+                Description=data['Description'],
+                Status=data['Status']
             )
-            return HttpResponseRedirect(reverse('homepage'))
+            return HttpResponseRedirect(reverse('/'))
     form = Ticket()
     return render(request, html, {'form': form})
 
 
+@login_required
 def edit(request, id):
     html = 'edit.html'
     edits = Bugs.objects.get(id=id)
     if request.method == 'POST':
-        form = Ticket(request.POST, initial={
-            'title': edits.title,
-            'description': edits.description
-        })
-        if form.is_valid():
-            edits.title = form.cleaned_data['title']
-            edits.description = form.cleaned_data['description']
-            edits.save()
-            return HttpResponseRedirect(reverse('homepage'))
-    form = Ticket(initial={
-        'title': edits.title,
-        'description': edits.description
-    })
+        form = Ticket(request.POST, edits=edits)
+        form.save()
+        if edits.Status == "Done":
+            edits.user_completed_ticket = edits.user_ticket_creator
+            edits.user_ticket_creator = None
+            form.save()
+        elif edits.Status == "Invalid":
+            edits.user_ticket_creator = None
+            edits.edits.user_completed_ticket = None
+            form.save()
+        elif edits.Status == "In_Progress":
+            edits.user_assigned_ticket = None
+            edits.user_assigned_ticket = edits.edits.user_ticket_creator
+            edits.user_completed_ticket = None
+            form.save()
+        elif edits.user_assigned_ticket is not None:
+            edits.Status = "In_Progress"
+            edits.user_completed_ticket = None
+            form.save()
+        return HttpResponseRedirect(reverse('/'))
+    form = Ticket()
     return render(request, html, {'form': form})
 
 
@@ -81,7 +90,7 @@ def loginview(request):
             if user:
                 login(request, user)
                 return HttpResponseRedirect(
-                    request.GET.get('next', reverse('homepage'))
+                    request.GET.get('next', reverse('/'))
                 )
     form = LoginForm()
     return render(request, html, {'form': form})
@@ -89,18 +98,16 @@ def loginview(request):
 
 def logoutview(request):
     logout(request)
-    return HttpResponseRedirect(reverse('homepage'))
+    return HttpResponseRedirect(reverse('login'))
 
 
 def mainlist(request, id):
     html = 'status.html'
-    user = User.objects.get(pk=id)
-    creator = Bugs.objects.filter(user_ticket_creator_id=id)
-    assigned = Bugs.objects.filter(user_assigned_ticket_id=id)
-    completed = Bugs.objects.filter(user_completed_ticket_id=id)
+    creator = Bugs.objects.filter(user_ticket_creator=id)
+    assigned = Bugs.objects.filter(user_assigned_ticket=id)
+    completed = Bugs.objects.filter(user_completed_ticket=id)
     return render(request, html, {
-        'user': user,
-        'created': creator,
-        'assigned': assigned,
-        'completed': completed
+        'Created': creator,
+        'Assigned': assigned,
+        'Completed': completed
     })

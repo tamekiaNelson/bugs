@@ -1,7 +1,12 @@
-<button >Create a Ticket</button>
+<form action=''method='post'>      
+{% csrf_token %}
+{{form.as_p}}
+<input type='submit' value='Submit'>
+</form>
+
 <div>
     <div>
-        <div>List of Tickets:</div>
+        <div>List of Tickets: </div>
         <ul> Created:  </ul>
         <br>
     </div>
@@ -22,3 +27,4 @@
     </div>
 
 </div>
+<a href='/logout/'>Logout</a>

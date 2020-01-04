@@ -1,0 +1,13 @@
+<a href="/">Return to Ticket List</a> <br><br>
+
+{% for data in ticket %}
+    <h1>{{data.Title}} </h1>
+    <br><br>
+    <p>{{data.Description}}</p>
+    <br>
+    <p>Created on: {{ data.Posted }}</p>
+{% endfor %}
+<br><br>
+<a href="/edit/<int:id>/">Edit Ticket</a>
+<br><br>
+<a href='/logout/'>Logout</a>

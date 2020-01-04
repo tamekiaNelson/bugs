@@ -13,20 +13,25 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.urls import path
 from django.contrib import admin
 from django.conf import settings
 from buggy import views
 from buggy.models import Bugs
-# admin.site.register(buggy)
+from django.conf.urls.static import static
+
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url('login/', views.loginview),
-    url('', views.index),
-    url('list/', views.mainlist),
-    url('ticket/', views.view_single_ticket),
-    url('add/', views.add),
-    url('edit/', views.edit),
-    url('logout/', views.logoutview),
-    ]
+    path('admin/', admin.site.urls),
+    path('login/', views.loginview, name='login'),
+    path('', views.index, name='/'),
+    path('list/<int:id>/', views.mainlist, name='status'),
+    path('ticket/<int:id>/', views.view_single_ticket, name='ticket'),
+    path('add/', views.add, name='add'),
+    path('edit/<int:id>/', views.edit, name='edit'),
+    path('logout/', views.logoutview, name='logout'),
+]
+
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.STATIC_URL, document_root=settings.STATIC_ROOT)
