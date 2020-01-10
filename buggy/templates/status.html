@@ -1,9 +1,22 @@
-<form action=''method='post'>      
-{% csrf_token %}
-{{form.as_p}}
-<input type='submit' value='Submit'>
-</form>
+<a href="/">Return to Ticket List</a> <br><br>
 
-
-
+<div> 
+    <div>
+    <h1> Ticket Created By User </h1>
+    {% for c in Created %}
+    <h4>Ticket Creator: {{c.user_ticket_creator}}</h4>
+    <ul>
+    <li><b>Ticket Title: </b> {{c.title}} </li>
+    <li><b>Ticket Description: </b> {{c.description}}</li>
+    <li><b>Ticket Post Date: </b> {{c.posted }}</li>
+    <li><b>Ticket Assigned By: </b> {{c.user_assigned_ticket}}</li>
+    <li><b>Ticket Completed By: </b> {{c.user_completed_ticket}}</li>
+    <li><b>Ticket Status: </b> {{c.status}}</li>  
+    </ul> 
+    <br>
+    {%empty%}
+    <h3> Nothing to display </h3>
+    {% endfor %}
+    </div>
+ </div>
 <a href='/logout/'>Logout</a>

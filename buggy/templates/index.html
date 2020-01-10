@@ -1,30 +1,78 @@
-<form action=''method='post'>      
-{% csrf_token %}
-{{form.as_p}}
-<input type='submit' value='Submit'>
-</form>
-
 <div>
     <div>
-        <div>List of Tickets: </div>
-        <ul> Created:  </ul>
-        <br>
-    </div>
-    <div>
-        <div>In Progress: </div>
-        <ul>
-            <div> Assigned:  </div>
-        </ul>
-        <br>
-    </div>
-    <div>Completd Tickets:</div>
-        <ul>
-            <div> User Who Finished: </div>
-        </ul>
-        <br>
-    </div>
-    <div >Invalid Tickets:</div>
+    <h1>New Tickets: </h1>
+    {% for n in New %}
+    <ul>
+    <li><b>Ticket Title: </b> {{n.title}} </li>
+    <li><b>Ticket Description: </b> {{n.description}}</li>
+    <li><b>Ticket Post Date: </b> {{n.posted }}</li>
+    <li><b>Ticket Created by: </b> {{n.user_ticket_creator}}</li>
+    <li><b>Ticket Assigned to: </b> {{n.user_assigned_ticket}}</li>
+    <li><b>Ticket Completed by: </b> {{n.user_completed_ticket}}</li>
+    <li><b>Ticket Status: </b> {{n.status}}</li>
+    <li><i><a href="/edit/{{n.id}}/">Edit Ticket</a></i></li>
+    </ul> 
+    <br>
+    {%empty%}
+    <h3> Nothing to display </h3>
+    {% endfor %}
     </div>
 
+    <div>
+    <h1>In Progress: </h1>
+    {% for ip in In_Progress %}
+    <ul>
+    <li><b>Ticket Title: </b> {{ip.title}} </li>
+    <li><b>Ticket Description: </b> {{ip.description}}</li>
+    <li><b>Ticket Post Date: </b> {{ip.posted }}</li>
+    <li><b>Ticket Created by: </b> {{ip.user_ticket_creator}}</li>
+    <li><b>Ticket Assigned to: </b> {{ip.user_assigned_ticket}}</li>
+    <li><b>Ticket Completed by: </b> {{ip.user_completed_ticket}}</li>
+    <li><b>Ticket Status: </b> {{ip.status}}</li>
+    <li><i><a href="/edit/{{ip.id}}/">Edit Ticket</a></i></li>
+    </ul>
+    <br>
+    {%empty%}
+    <h3> Nothing to display </h3>
+    {% endfor %}
+    </div>
+
+    <div>
+    <h1>Completed Tickets: </h1>
+    {% for d in Done %}
+    <ul>
+    <li>{<b>Ticket Title: </b> {d.title}} </li>
+    <li><b>Ticket Description: </b> {{d.description}}</li>
+    <li><b>Ticket Post Date: </b> {{d.posted }}</li>
+    <li><b>Ticket Created by: </b> {{d.user_ticket_creator}}</li>
+    <li><b>Ticket Assigned to: </b> {{d.user_assigned_ticket}}</li>
+    <li><b>Ticket Completed by: </b> {{d.user_completed_ticket}}</li>
+    <li><b>Ticket Status: </b> {{d.status}}</li>
+    <li><i><a href="/edit/{{d.id}}/">Edit Ticket</a></i></li>
+    </ul>
+    <br>
+    {%empty%}
+    <h3> Nothing to display </h3>
+    {% endfor %}
+    </div>
+
+    <div>
+    <h1>Invalid Tickets: </h1>
+    {% for i in Invalid %}
+    <ul>
+    <li><b>Ticket Title: </b> {{i.title}} </li>
+    <li><b>Ticket Description: </b> {{i.description}}</li>
+    <li><b>Ticket Post Date: </b> {{i.posted }}</li>
+    <li><b>Ticket Created by: </b> {{i.user_ticket_creator}}</li>
+    <li><b>Ticket Assigned to: </b> {{i.user_assigned_ticket}}</li>
+    <li><b>Ticket Completed by: </b> {{i.user_completed_ticket}}</li>
+    <li><b>Ticket Status: </b> {{i.status}}</li>
+    <li><i><a href="/edit/{{i.id}}/">Edit Ticket</a></i></li>
+    </ul>
+    <br>
+    {%empty%}
+    <h3> Nothing to display </h3>
+    {% endfor %}
+    </div>
 </div>
 <a href='/logout/'>Logout</a>

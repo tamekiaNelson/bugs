@@ -2,11 +2,22 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 
+New = 'New'
+In_Progress = 'In_Progress'
+Done = 'Done'
+Invalid = 'Invalid'
+Status_Selection = [
+    (New, 'New'),
+    (In_Progress, 'In_Progress'),
+    (Done, 'Done'),
+    (Invalid, 'Invalid')
+]
 
-class Bugs(models.Model):
-    Title = models.CharField(max_length=100)
-    Description = models.TextField()
-    Posted = models.DateTimeField(default=timezone.now)
+
+class Bug(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    posted = models.DateTimeField(default=timezone.now)
     user_ticket_creator = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -28,20 +39,11 @@ class Bugs(models.Model):
         blank=True,
         null=True
     )
-    New = 'New'
-    In_Progress = 'In_Progress'
-    Done = 'Done'
-    Invalid = 'Invalid'
-    Status_Selection = [
-        (New, 'New'),
-        (In_Progress, 'In_Progress'),
-        (Done, 'Done'),
-        (Invalid, 'Invalid')
-    ]
-    Status = models.CharField(
+
+    status = models.CharField(
         max_length=100,
         choices=Status_Selection,
         default=New)
 
     def __str__(self):
-        return f"(self.Title, self.Status)"
+        return f"{self.title}, {self.status}"

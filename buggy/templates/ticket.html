@@ -1,13 +1,23 @@
 <a href="/">Return to Ticket List</a> <br><br>
 
-{% for data in ticket %}
-    <h1>{{data.Title}} </h1>
-    <br><br>
-    <p>{{data.Description}}</p>
+    <div>
+    <h1>New Tickets: </h1>
+    {% for single in single_ticket %}
+    <ul>
+    <li>{{single.title}} </li>
+    <li>{{single.description}}</li>
+    <li>{{single.posted }}</li>
+    <li>{{single.user_ticket_creator}}</li>
+    <li>{{single.user_assigned_ticket}}</li>
+    <li>{{single.user_completed_ticket}}</li>
+    <li>{{single.status}}</li>
+    <li><i><a href="/edit/{{single.id}}/">Edit Ticket</a></i></li>
+    </ul> 
     <br>
-    <p>Created on: {{ data.Posted }}</p>
-{% endfor %}
-<br><br>
-<a href="/edit/<int:id>/">Edit Ticket</a>
+    {%empty%}
+    <h3> Nothing to display </h3>
+    {% endfor %}
+    </div>
+
 <br><br>
 <a href='/logout/'>Logout</a>

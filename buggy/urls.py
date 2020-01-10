@@ -17,14 +17,14 @@ from django.urls import path
 from django.contrib import admin
 from django.conf import settings
 from buggy import views
-from buggy.models import Bugs
+from buggy.models import Bug
 from django.conf.urls.static import static
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', views.loginview, name='login'),
-    path('', views.index, name='/'),
+    path('', views.index, name='homepage'),
     path('list/<int:id>/', views.mainlist, name='status'),
     path('ticket/<int:id>/', views.view_single_ticket, name='ticket'),
     path('add/', views.add, name='add'),

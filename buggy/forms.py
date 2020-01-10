@@ -1,15 +1,23 @@
 from django import forms
-from buggy.models import Bugs
+from buggy.models import Bug
 
 
 class Ticket(forms.ModelForm):
     class Meta:
-        model = Bugs
+        model = Bug
         fields = [
-            'user_ticket_creator',
-            'Title',
-            'Description',
-            'Status'
+            'title',
+            'description',
+        ]
+
+
+class EditTicket(forms.ModelForm):
+    class Meta:
+        model = Bug
+        fields = [
+            'title',
+            'description',
+            'status',
         ]
 
 
