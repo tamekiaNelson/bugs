@@ -58,15 +58,15 @@ def edit(request, id):
         if form.is_valid():
             data = form.cleaned_data
             if data['status'] == "Done":
+                edits.user_assigned_ticket = None
                 edits.user_completed_ticket = edits.user_ticket_creator
-                edits.user_ticket_creator = None
                 form.save()
             elif data['status'] == "Invalid":
                 edits.user_assigned_ticket = None
                 edits.user_completed_ticket = None
                 form.save()
             elif data['status'] == "In_Progress":
-                edits.user_assigned_ticket = request.user
+                edits.user_assigned_ticket = edits.user_assigned_ticket
                 edits.user_completed_ticket = None
                 form.save()
             elif data['status'] == "New":
